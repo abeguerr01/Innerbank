@@ -1,0 +1,161 @@
+﻿<UserControl
+  x:Class="Innerbank.Vistas.ConsultarCuenta"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Innerbank.Vistas"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  Width="800"
+  Height="450"
+  mc:Ignorable="d"
+>
+  <Grid Background="White">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock
+      Grid.Row="0"
+      Margin="10"
+      FontSize="24"
+      FontWeight="Bold"
+      Text="Estado de la cuenta"
+      TextAlignment="Center"
+    />
+
+    <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal">
+      <TextBlock Name="tbSALDO" Grid.Row="1" FontSize="50" FontWeight="Bold" Text="Saldo: " />
+      <TextBlock
+        Name="tbSaldo"
+        Grid.Row="1"
+        FontSize="50"
+        FontWeight="Bold"
+        Text="{Binding Saldo}"
+      />
+      <TextBlock Name="tbDivisa" Grid.Row="1" FontSize="50" FontWeight="Bold" Text="€" />
+    </StackPanel>
+    <Grid Grid.Row="2" Margin="10">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="65*" />
+        <ColumnDefinition Width="45*" />
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="0">
+        <StackPanel Orientation="Vertical">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Name="tbTITULAR" FontSize="24" FontWeight="DemiBold" Text="TITULAR: " />
+            <TextBlock
+              Name="tbTitular"
+              VerticalAlignment="Center"
+              FontSize="24"
+              Text="{Binding Titular}"
+            />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock
+              Name="tbNUMCUENTA"
+              FontSize="24"
+              FontWeight="DemiBold"
+              Text="Número de cuenta: "
+            />
+            <TextBlock
+              Name="tbNumCuenta"
+              VerticalAlignment="Center"
+              FontSize="18"
+              Text="{Binding NumCuenta}"
+            />
+          </StackPanel>
+
+          <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="70*" />
+              <ColumnDefinition Width="30*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+              Grid.Column="0"
+              Width="180"
+              Padding="10,5"
+              VerticalContentAlignment="Center"
+              FontSize="30"
+              Text="{Binding Cantidad, UpdateSourceTrigger=LostFocus, TargetNullValue=''}"
+            />
+
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+              <Button
+                Name="btnIngresarDinero"
+                Command="{Binding IngresarCommand}"
+                Content="Ingresar dinero"
+                FontSize="20"
+              />
+              <Button
+                Name="btnRetirarDinero"
+                Command="{Binding RetirarCommand}"
+                Content="Retirar dinero"
+                FontSize="20"
+              />
+            </StackPanel>
+          </Grid>
+
+          <DataGrid
+            Height="150"
+            Margin="10,10"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding ListaMovimientos}"
+          >
+            <DataGrid.Columns>
+              <DataGridTextColumn Width="30*" Binding="{Binding Movimiento}" Header="Movimiento" />
+              <DataGridTextColumn Width="40*" Binding="{Binding Dia}" Header="Fecha" />
+              <DataGridTextColumn Width="30*" Binding="{Binding Total}" Header="Importe" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Grid>
+
+      <StackPanel Grid.Column="1" Orientation="Vertical">
+        <TextBlock FontSize="24" Text="COTITULAR/ES:" />
+
+        <!--  Enlazado a la ObservableCollection  -->
+        <ListView
+          x:Name="lvCotitulares"
+          Height="150"
+          Margin="0,10,0,0"
+          ItemsSource="{Binding Cotitulares}"
+        />
+
+        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+          <!--  Enlazado a la propiedad del nuevo DNI  -->
+          <TextBox
+            Width="115"
+            Height="30"
+            Margin="0,0,5,0"
+            VerticalContentAlignment="Center"
+            FontSize="16"
+            Text="{Binding NuevoCotitularDni, UpdateSourceTrigger=PropertyChanged}"
+          />
+
+          <Button
+            Padding="10,0"
+            Command="{Binding AñadirCotitularCommand}"
+            Content="Añadir"
+            FontSize="16"
+          />
+        </StackPanel>
+        <Button
+          Grid.Row="4"
+          Width="100"
+          Height="50"
+          Margin="5"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Bottom"
+          Command="{Binding VolverCommand}"
+          Content="Volver"
+          FontSize="20"
+        />
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>
